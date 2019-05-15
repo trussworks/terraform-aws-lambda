@@ -5,7 +5,7 @@
  * Creates the following resources:
  *
  * * Lambda function
- * * IAM role and policies described in the inputs
+ * * IAM role with policy to allow logging to Cloudwatch Logs
  * * Cloudwatch Logs group
  *
  * ## Usage
