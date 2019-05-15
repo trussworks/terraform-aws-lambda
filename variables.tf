@@ -13,9 +13,9 @@ variable "runtime" {
   type        = "string"
 }
 
-variable "lambda_role_policy" {
-  description = "Role policy for Lambda function"
-  type        = "string"
+variable "role_policy_arns" {
+  description = "List of policy ARNs to attach to Lambda role"
+  type        = "list"
 }
 
 variable "s3_bucket" {

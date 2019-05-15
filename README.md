@@ -16,7 +16,7 @@ module "my_lambda_function" {
   name                  = "my_app"
   job_identifier        = "instance_alpha"
   runtime               = "go1.x"
-  lambda_role_policy    = "${data.aws_iam_policy_document.my_app_policy.json}"
+  role_policy_arns      = ["${aws_iam_policy.my_app_lambda_policy.arn}"]
   s3_bucket             = "my_s3_bucket"
   s3_key                = "my_app/1.0/my_app.zip"
 
@@ -31,7 +31,7 @@ module "my_lambda_function" {
   }
 
   tags {
-    "Name" = "my_app_lambda"
+    "Service" = "big_app"
   }
 
 }
@@ -44,9 +44,9 @@ module "my_lambda_function" {
 | cloudwatch\_logs\_retention\_days | Number of days to retain logs in Cloudwatch Logs | string | `"30"` | no |
 | env\_vars | Map of environment variables for Lambda function | map | `<map>` | no |
 | job\_identifier | Identifier for specific instance of Lambda function | string | n/a | yes |
-| lambda\_role\_policy | Role policy for Lambda function | string | n/a | yes |
 | memory\_size | Size in MB of Lambda function memory allocation | string | `"128"` | no |
 | name | Lambda function name | string | n/a | yes |
+| role\_policy\_arns | List of policy ARNs to attach to Lambda role | list | n/a | yes |
 | runtime | Lambda runtime type | string | n/a | yes |
 | s3\_bucket | Name of s3 bucket used for Lambda build | string | n/a | yes |
 | s3\_key | Key for s3 object for Lambda function code | string | n/a | yes |

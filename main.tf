@@ -16,7 +16,7 @@
  *   name                  = "my_app"
  *   job_identifier        = "instance_alpha"
  *   runtime               = "go1.x"
- *   lambda_role_policy    = "${data.aws_iam_policy_document.my_app_policy.json}"
+ *   role_policy_arns      = ["${aws_iam_policy.my_app_lambda_policy.arn}"]
  *   s3_bucket             = "my_s3_bucket"
  *   s3_key                = "my_app/1.0/my_app.zip"
  *
@@ -31,7 +31,7 @@
  *   }
  *
  *   tags {
- *     "Name" = "my_app_lambda"
+ *     "Service" = "big_app"
  *   }
  *
  * }
@@ -40,6 +40,10 @@
 
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
+
+locals = {
+  full_name = "${var.name}-${var.job_identifier}"
+}
 
 # This is the IAM policy for letting lambda assume roles.
 data "aws_iam_policy_document" "assume_role" {
@@ -55,21 +59,7 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-# Create the IAM role for the Lambda instance.
-resource "aws_iam_role" "main" {
-  name               = "lambda-${var.name}-${var.job_identifier}"
-  assume_role_policy = "${data.aws_iam_policy_document.assume_role.json}"
-}
-
-# Create and attach the user-provided policy to the above IAM role.
-resource "aws_iam_role_policy" "main" {
-  name = "lambda-${var.name}-${var.job_identifier}"
-  role = "${aws_iam_role.main.id}"
-
-  policy = "${var.lambda_role_policy}"
-}
-
-# Define policy document for writing to Cloudwatch Logs.
+# Define default policy document for writing to Cloudwatch Logs.
 data "aws_iam_policy_document" "logs_policy_doc" {
   statement {
     sid    = "WriteCloudWatchLogs"
@@ -80,31 +70,38 @@ data "aws_iam_policy_document" "logs_policy_doc" {
       "logs:PutLogEvents",
     ]
 
-    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.name}-${var.job_identifier}:*"]
+    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${local.full_name}:*"]
   }
 }
 
-# Attach Cloudwatch Logs policy doc to policy.
-resource "aws_iam_policy" "logs_policy" {
-  name        = "lambda-${var.name}-${var.job_identifier}-cloudwatch-logs"
-  description = "Allow Cloudwatch Logs for lambda-${var.name}-${var.job_identifier}"
+# Create the IAM role for the Lambda instance.
+resource "aws_iam_role" "main" {
+  name               = "lambda-${local.full_name}"
+  assume_role_policy = "${data.aws_iam_policy_document.assume_role.json}"
+}
+
+# Attach the logging policy to the above IAM role.
+resource "aws_iam_role_policy" "main" {
+  name = "lambda-${local.full_name}"
+  role = "${aws_iam_role.main.id}"
 
   policy = "${data.aws_iam_policy_document.logs_policy_doc.json}"
 }
 
-# Attach Cloudwatch Logs policy to role defined above.
-resource "aws_iam_role_policy_attachment" "logs_policy_attach" {
+# Attach user-provided policies to role defined above.
+resource "aws_iam_role_policy_attachment" "user_policy_attach" {
+  count      = "${length(var.role_policy_arns)}"
   role       = "${aws_iam_role.main.name}"
-  policy_arn = "${aws_iam_policy.logs_policy.arn}"
+  policy_arn = "${var.role_policy_arns[count.index]}"
 }
 
 # Cloudwatch Logs
 resource "aws_cloudwatch_log_group" "main" {
-  name              = "/aws/lambda/${var.name}-${var.job_identifier}"
+  name              = "/aws/lambda/${local.full_name}"
   retention_in_days = "${var.cloudwatch_logs_retention_days}"
 
   tags {
-    Name = "${var.name}-${var.job_identifier}"
+    Name = "${local.full_name}"
   }
 }
 
@@ -115,7 +112,7 @@ resource "aws_lambda_function" "main" {
   s3_bucket = "${var.s3_bucket}"
   s3_key    = "${var.s3_key}"
 
-  function_name = "${var.name}-${var.job_identifier}"
+  function_name = "${local.full_name}"
   role          = "${aws_iam_role.main.arn}"
   handler       = "${var.name}"
   runtime       = "${var.runtime}"
