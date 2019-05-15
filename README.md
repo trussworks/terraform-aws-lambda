@@ -12,7 +12,7 @@ Creates the following resources:
 
 ```hcl
 module "my_lambda_function" {
-  source                = "trussworks/terraform-aws-lambda"
+  source                = "trussworks/lambda/aws"
   name                  = "my_app"
   job_identifier        = "instance_alpha"
   runtime               = "go1.x"
