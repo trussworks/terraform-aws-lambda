@@ -48,7 +48,7 @@ module "my_lambda_function" {
 | memory\_size | Size in MB of Lambda function memory allocation | string | `"128"` | no |
 | name | Lambda function name | string | n/a | yes |
 | role\_policy\_arns | List of policy ARNs to attach to Lambda role | list | n/a | yes |
-| role\_policy\_arns\_count | Count of policy ARNs to attach to Lambda role | number | n/a | yes |
+| role\_policy\_arns\_count | Count of policy ARNs to attach to Lambda role | string | n/a | yes |
 | runtime | Lambda runtime type | string | n/a | yes |
 | s3\_bucket | Name of s3 bucket used for Lambda build | string | n/a | yes |
 | s3\_key | Key for s3 object for Lambda function code | string | n/a | yes |
