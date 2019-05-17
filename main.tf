@@ -12,19 +12,20 @@
  *
  * ```hcl
  * module "my_lambda_function" {
- *   source                = "trussworks/terraform-aws-lambda"
- *   name                  = "my_app"
- *   job_identifier        = "instance_alpha"
- *   runtime               = "go1.x"
- *   role_policy_arns      = ["${aws_iam_policy.my_app_lambda_policy.arn}"]
- *   s3_bucket             = "my_s3_bucket"
- *   s3_key                = "my_app/1.0/my_app.zip"
+ *   source                 = "trussworks/terraform-aws-lambda"
+ *   name                   = "my_app"
+ *   job_identifier         = "instance_alpha"
+ *   runtime                = "go1.x"
+ *   role_policy_arns_count = 1
+ *   role_policy_arns       = ["${aws_iam_policy.my_app_lambda_policy.arn}"]
+ *   s3_bucket              = "my_s3_bucket"
+ *   s3_key                 = "my_app/1.0/my_app.zip"
  *
- *   subnet_ids            = ["subnet-0123456789abcdef0"]
- *   security_group_ids    = ["sg-0123456789abcdef0"]
+ *   subnet_ids             = ["subnet-0123456789abcdef0"]
+ *   security_group_ids     = ["sg-0123456789abcdef0"]
  *
- *   source_types          = ["events"]
- *   source_arns           = ["${aws_cloudwatch_event_rule.trigger.arn}"]
+ *   source_types           = ["events"]
+ *   source_arns            = ["${aws_cloudwatch_event_rule.trigger.arn}"]
  *
  *   env_vars {
  *     VARNAME = "value"
@@ -88,9 +89,29 @@ resource "aws_iam_role_policy" "main" {
   policy = "${data.aws_iam_policy_document.logs_policy_doc.json}"
 }
 
+# This code verifies that the count of policy ARNs matches the actual
+# length of the policy ARNs list. This is a workaround for a Terraform
+# limitation.
+resource "null_resource" "verify_policy_list_count" {
+  provisioner "local-exec" {
+    command = <<SH
+if [ ${var.role_policy_arns_count} -ne ${length(var.role_policy_arns)} ]; then
+  echo "var.role_policy_arns_count must match the actual length of var.role_policy_arns";
+  exit 1;
+fi
+SH
+  }
+
+  # Rerun this script if the input values change.
+  triggers {
+    role_policy_arns_count_computed = "${length(var.role_policy_arns)}"
+    role_policy_arns_count_provided = "${var.role_policy_arns_count}"
+  }
+}
+
 # Attach user-provided policies to role defined above.
 resource "aws_iam_role_policy_attachment" "user_policy_attach" {
-  count      = "${length(var.role_policy_arns)}"
+  count      = "${var.role_policy_arns_count}"
   role       = "${aws_iam_role.main.name}"
   policy_arn = "${var.role_policy_arns[count.index]}"
 }

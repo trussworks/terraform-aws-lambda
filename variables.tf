@@ -13,6 +13,12 @@ variable "runtime" {
   type        = "string"
 }
 
+# We need an explicit count because of Terraform issue 17421
+variable "role_policy_arns_count" {
+  description = "Count of policy ARNs to attach to Lambda role"
+  type        = "number"
+}
+
 variable "role_policy_arns" {
   description = "List of policy ARNs to attach to Lambda role"
   type        = "list"
