@@ -42,7 +42,7 @@
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
-locals = {
+locals {
   full_name = "${var.name}-${var.job_identifier}"
 }
 
@@ -103,7 +103,7 @@ SH
   }
 
   # Rerun this script if the input values change.
-  triggers {
+  triggers = {
     role_policy_arns_count_computed = "${length(var.role_policy_arns)}"
     role_policy_arns_count_provided = "${var.role_policy_arns_count}"
   }
@@ -121,7 +121,7 @@ resource "aws_cloudwatch_log_group" "main" {
   name              = "/aws/lambda/${local.full_name}"
   retention_in_days = "${var.cloudwatch_logs_retention_days}"
 
-  tags {
+  tags = {
     Name = "${local.full_name}"
   }
 }
