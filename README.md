@@ -43,7 +43,7 @@ module "my_lambda_function" {
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | cloudwatch\_logs\_retention\_days | Number of days to retain logs in Cloudwatch Logs | string | `"30"` | no |
-| env\_vars | Map of environment variables for Lambda function | map | `<map>` | no |
+| env\_vars | Map of environment variables for Lambda function | map | `{}` | no |
 | job\_identifier | Identifier for specific instance of Lambda function | string | n/a | yes |
 | memory\_size | Size in MB of Lambda function memory allocation | string | `"128"` | no |
 | name | Lambda function name | string | n/a | yes |
@@ -52,11 +52,11 @@ module "my_lambda_function" {
 | runtime | Lambda runtime type | string | n/a | yes |
 | s3\_bucket | Name of s3 bucket used for Lambda build | string | n/a | yes |
 | s3\_key | Key for s3 object for Lambda function code | string | n/a | yes |
-| security\_group\_ids | List of security group IDs for Lambda VPC config (leave empty if no VPC) | list | `<list>` | no |
-| source\_arns | List of arns for Lambda triggers; order must match source_types | list | `<list>` | no |
-| source\_types | List of sources for Lambda triggers; order must match source_arns | list | `<list>` | no |
-| subnet\_ids | List of subnet IDs for Lambda VPC config (leave empty if no VPC) | list | `<list>` | no |
-| tags | Map of tags for Lambda function | map | `<map>` | no |
+| security\_group\_ids | List of security group IDs for Lambda VPC config (leave empty if no VPC) | list | `[]` | no |
+| source\_arns | List of arns for Lambda triggers; order must match source_types | list | `[]` | no |
+| source\_types | List of sources for Lambda triggers; order must match source_arns | list | `[]` | no |
+| subnet\_ids | List of subnet IDs for Lambda VPC config (leave empty if no VPC) | list | `[]` | no |
+| tags | Map of tags for Lambda function | map | `{}` | no |
 | timeout | Timeout in seconds for Lambda function timeout | string | `"60"` | no |
 
 ## Outputs
