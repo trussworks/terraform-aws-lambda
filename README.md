@@ -1,4 +1,4 @@
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
 Creates a lambda function with associated role and policies, which
 will log to Cloudwatch Logs.
 
@@ -27,17 +27,19 @@ module "my_lambda_function" {
   source_types           = ["events"]
   source_arns            = ["${aws_cloudwatch_event_rule.trigger.arn}"]
 
-  env_vars {
+  env_vars = {
     VARNAME = "value"
   }
 
-  tags {
+  tags = {
     "Service" = "big_app"
   }
 
 }
 ```
 
+
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
 | Name | Description | Type | Default | Required |
