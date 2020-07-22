@@ -13,6 +13,43 @@ variable "runtime" {
   type        = "string"
 }
 
+# Either deploy from a specified bucket
+variable "s3_bucket" {
+  description = "Name of s3 bucket used for Lambda build"
+  type        = "string"
+}
+
+variable "s3_key" {
+  description = "Key for s3 object for Lambda function code"
+  type        = "string"
+  default     = ""
+}
+
+# Or deploy from a specified Github repo/version
+variable "github_project" {
+  default     = ""
+  type        = string
+  description = "The unique Github project to pull from. Currently, this must be public. Eg. 'trussworks/aws-iam-sleuth'"
+}
+
+variable "github_release" {
+  default     = ""
+  type        = string
+  description = "The release tag to download."
+}
+
+variable "github_filename" {
+  default     = "deployment.zip"
+  type        = string
+  description = "Name of the file to get when building url to pull."
+}
+
+variable "validation_sha" {
+  default     = ""
+  type        = string
+  description = "SHA to validate the file."
+}
+
 # We need an explicit count because of Terraform issue 17421
 variable "role_policy_arns_count" {
   description = "Count of policy ARNs to attach to Lambda role"
@@ -24,15 +61,6 @@ variable "role_policy_arns" {
   type        = "list"
 }
 
-variable "s3_bucket" {
-  description = "Name of s3 bucket used for Lambda build"
-  type        = "string"
-}
-
-variable "s3_key" {
-  description = "Key for s3 object for Lambda function code"
-  type        = "string"
-}
 
 variable "memory_size" {
   default     = 128
@@ -87,3 +115,5 @@ variable "source_arns" {
   description = "List of arns for Lambda triggers; order must match source_types"
   type        = "list"
 }
+
+
