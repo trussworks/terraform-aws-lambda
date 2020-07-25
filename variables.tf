@@ -17,6 +17,7 @@ variable "runtime" {
 variable "s3_bucket" {
   description = "Name of s3 bucket used for Lambda build"
   type        = "string"
+  default     = ""
 }
 
 variable "s3_key" {
