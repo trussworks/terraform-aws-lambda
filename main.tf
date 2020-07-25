@@ -117,7 +117,7 @@ SH
 resource "aws_iam_role_policy_attachment" "user_policy_attach" {
   count      = var.role_policy_arns_count
   role       = aws_iam_role.main.name
-  policy_arn = "${var.role_policy_arns[count.index]}"
+  policy_arn = var.role_policy_arns[count.index]
 }
 
 # Cloudwatch Logs
@@ -131,7 +131,7 @@ resource "aws_cloudwatch_log_group" "main" {
 }
 
 # Lambda function from s3
-resource "aws_lambda_function" "main" {
+resource "aws_lambda_function" "main_from_s3" {
   count      = local.from_github ? 0 : 1
   depends_on = [aws_cloudwatch_log_group.main]
 
@@ -171,7 +171,7 @@ resource "null_resource" "get_github_release_artifact" {
 }
 
 # Only on Lambda function from github
-resource "aws_lambda_function" "main" {
+resource "aws_lambda_function" "main_from_gh" {
   count      = local.from_github ? 1 : 0
   depends_on = [aws_cloudwatch_log_group.main]
 
@@ -204,7 +204,7 @@ resource "aws_lambda_permission" "allow_source" {
   statement_id = "AllowExecutionForLambda-${var.source_types[count.index]}"
 
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.main.function_name
+  function_name = local.from_github ? aws_lambda_function.main_from_gh.function_name : aws_lambda_function.main_from_s3.function_name
 
   principal  = "${var.source_types[count.index]}.amazonaws.com"
   source_arn = "${var.source_arns[count.index]}"
