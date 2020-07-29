@@ -204,7 +204,7 @@ resource "aws_lambda_permission" "allow_source" {
   statement_id = "AllowExecutionForLambda-${var.source_types[count.index]}"
 
   action        = "lambda:InvokeFunction"
-  function_name = local.from_github ? aws_lambda_function.main_from_gh.function_name : aws_lambda_function.main_from_s3.function_name
+  function_name = local.full_name
 
   principal  = "${var.source_types[count.index]}.amazonaws.com"
   source_arn = "${var.source_arns[count.index]}"
