@@ -1,6 +1,6 @@
 output "function_name" {
   description = "Name of the AWS Lambda function"
-  value       = "${aws_lambda_function.main.function_name}"
+  value       = "${aws_lambda_function.main_from_gh ? aws_lambda_function.main_from_gh.function_name : aws_lambda_function.main_from_s3.function_name}"
 }
 
 output "lambda_arn" {
