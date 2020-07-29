@@ -46,7 +46,7 @@ locals {
   full_name = "${var.name}-${var.job_identifier}"
 
   # Only use github if project is defined... otherwise default to expecting s3
-  from_github   = var.github_project ? 1 : 0
+  from_github   = var.github_project != "" ? 1 : 0
   github_dl_url = "https://github.com/${var.github_project}/releases/download/${var.github_release}"
 }
 
