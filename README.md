@@ -8,10 +8,17 @@ Creates the following resources:
 * IAM role with policy to allow logging to Cloudwatch Logs
 * Cloudwatch Logs group
 
-## Terraform Versions
+The Lambda function will either refer to a packge in S3 or a public release on Github.
 
-Terraform 0.12. Pin module version to ~> 2.0. Submit pull requests to `master` branch.
-Terraform 0.11. Pin module version to ~> 1.0. Submit pull requests to `terraform011` branch.
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+Creates a lambda function with associated role and policies, which
+will log to Cloudwatch Logs.
+
+Creates the following resources:
+
+* Lambda function
+* IAM role with policy to allow logging to Cloudwatch Logs
+* Cloudwatch Logs group
 
 ## Usage
 
@@ -43,28 +50,41 @@ module "my_lambda_function" {
 }
 ```
 
+## Requirements
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+No requirements.
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| aws | n/a |
+| null | n/a |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| cloudwatch\_logs\_retention\_days | Number of days to retain logs in Cloudwatch Logs | string | `"30"` | no |
-| env\_vars | Map of environment variables for Lambda function | map | `{}` | no |
-| job\_identifier | Identifier for specific instance of Lambda function | string | n/a | yes |
-| memory\_size | Size in MB of Lambda function memory allocation | string | `"128"` | no |
-| name | Lambda function name | string | n/a | yes |
-| role\_policy\_arns | List of policy ARNs to attach to Lambda role | list | n/a | yes |
-| role\_policy\_arns\_count | Count of policy ARNs to attach to Lambda role | string | n/a | yes |
-| runtime | Lambda runtime type | string | n/a | yes |
-| s3\_bucket | Name of s3 bucket used for Lambda build | string | n/a | yes |
-| s3\_key | Key for s3 object for Lambda function code | string | n/a | yes |
-| security\_group\_ids | List of security group IDs for Lambda VPC config (leave empty if no VPC) | list | `[]` | no |
-| source\_arns | List of arns for Lambda triggers; order must match source_types | list | `[]` | no |
-| source\_types | List of sources for Lambda triggers; order must match source_arns | list | `[]` | no |
-| subnet\_ids | List of subnet IDs for Lambda VPC config (leave empty if no VPC) | list | `[]` | no |
-| tags | Map of tags for Lambda function | map | `{}` | no |
-| timeout | Timeout in seconds for Lambda function timeout | string | `"60"` | no |
+|------|-------------|------|---------|:--------:|
+| cloudwatch\_logs\_retention\_days | Number of days to retain logs in Cloudwatch Logs | `string` | `30` | no |
+| env\_vars | Map of environment variables for Lambda function | `map` | `{}` | no |
+| github\_filename | Name of the file to get when building url to pull. | `string` | `"deployment.zip"` | no |
+| github\_project | The unique Github project to pull from. Currently, this must be public. Eg. 'trussworks/aws-iam-sleuth' | `string` | `""` | no |
+| github\_release | The release tag to download. | `string` | `""` | no |
+| job\_identifier | Identifier for specific instance of Lambda function | `string` | n/a | yes |
+| memory\_size | Size in MB of Lambda function memory allocation | `string` | `128` | no |
+| name | Lambda function name | `string` | n/a | yes |
+| role\_policy\_arns | List of policy ARNs to attach to Lambda role | `list` | n/a | yes |
+| role\_policy\_arns\_count | Count of policy ARNs to attach to Lambda role | `string` | n/a | yes |
+| runtime | Lambda runtime type | `string` | n/a | yes |
+| s3\_bucket | Name of s3 bucket used for Lambda build | `string` | n/a | yes |
+| s3\_key | Key for s3 object for Lambda function code | `string` | `""` | no |
+| security\_group\_ids | List of security group IDs for Lambda VPC config (leave empty if no VPC) | `list` | `[]` | no |
+| source\_arns | List of arns for Lambda triggers; order must match source\_types | `list` | `[]` | no |
+| source\_types | List of sources for Lambda triggers; order must match source\_arns | `list` | `[]` | no |
+| subnet\_ids | List of subnet IDs for Lambda VPC config (leave empty if no VPC) | `list` | `[]` | no |
+| tags | Map of tags for Lambda function | `map` | `{}` | no |
+| timeout | Timeout in seconds for Lambda function timeout | `string` | `60` | no |
+| validation\_sha | SHA to validate the file. | `string` | `""` | no |
 
 ## Outputs
 
@@ -75,3 +95,8 @@ module "my_lambda_function" {
 | lambda\_arn | ARN for the Lambda function |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+## Terraform Versions
+
+Terraform 0.12. Pin module version to ~> 2.0. Submit pull requests to `master` branch.
+Terraform 0.11. Pin module version to ~> 1.0. Submit pull requests to `terraform011` branch.

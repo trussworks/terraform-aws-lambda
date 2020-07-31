@@ -44,6 +44,10 @@ data "aws_caller_identity" "current" {}
 
 locals {
   full_name = "${var.name}-${var.job_identifier}"
+
+  # Only use github if project is defined... otherwise default to expecting s3
+  from_github   = var.github_project != "" ? true : false
+  github_dl_url = "https://github.com/${var.github_project}/releases/download/${var.github_release}"
 }
 
 # This is the IAM policy for letting lambda assume roles.
@@ -113,7 +117,7 @@ SH
 resource "aws_iam_role_policy_attachment" "user_policy_attach" {
   count      = var.role_policy_arns_count
   role       = aws_iam_role.main.name
-  policy_arn = "${var.role_policy_arns[count.index]}"
+  policy_arn = var.role_policy_arns[count.index]
 }
 
 # Cloudwatch Logs
@@ -126,12 +130,53 @@ resource "aws_cloudwatch_log_group" "main" {
   }
 }
 
-# Lambda function
-resource "aws_lambda_function" "main" {
+# Lambda function from s3
+resource "aws_lambda_function" "main_from_s3" {
+  count      = local.from_github ? 0 : 1
   depends_on = [aws_cloudwatch_log_group.main]
 
   s3_bucket = var.s3_bucket
   s3_key    = var.s3_key
+
+  function_name = local.full_name
+  role          = aws_iam_role.main.arn
+  handler       = var.name
+  runtime       = var.runtime
+  memory_size   = var.memory_size
+  timeout       = var.timeout
+
+  environment {
+    variables = var.env_vars
+  }
+
+  tags = var.tags
+
+  vpc_config {
+    subnet_ids         = var.subnet_ids
+    security_group_ids = var.security_group_ids
+  }
+}
+
+
+# Only on Lambda function from github
+resource "null_resource" "get_github_release_artifact" {
+  count = local.from_github ? 1 : 0
+  triggers = {
+    version_string = "${var.github_release}"
+    file_hash      = "${var.validation_sha}"
+  }
+  provisioner "local-exec" {
+    command = "bash ${path.module}/scripts/dl-release.sh ${local.github_dl_url} ${var.github_filename} ${var.validation_sha}"
+  }
+}
+
+# Only on Lambda function from github
+resource "aws_lambda_function" "main_from_gh" {
+  count      = local.from_github ? 1 : 0
+  depends_on = [aws_cloudwatch_log_group.main]
+
+  filename         = var.github_filename
+  source_code_hash = var.validation_sha
 
   function_name = local.full_name
   role          = aws_iam_role.main.arn
@@ -159,7 +204,7 @@ resource "aws_lambda_permission" "allow_source" {
   statement_id = "AllowExecutionForLambda-${var.source_types[count.index]}"
 
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.main.function_name
+  function_name = local.full_name
 
   principal  = "${var.source_types[count.index]}.amazonaws.com"
   source_arn = "${var.source_arns[count.index]}"
