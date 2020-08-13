@@ -1,16 +1,3 @@
-
-Creates a lambda function with associated role and policies, which
-will log to Cloudwatch Logs.
-
-Creates the following resources:
-
-* Lambda function
-* IAM role with policy to allow logging to Cloudwatch Logs
-* Cloudwatch Logs group
-
-The Lambda function will either refer to a packge in S3 or a public release on Github.
-
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 Creates a lambda function with associated role and policies, which
 will log to Cloudwatch Logs.
 
@@ -50,15 +37,19 @@ module "my_lambda_function" {
 }
 ```
 
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | ~> 0.12.0 |
+| aws | ~> 2.70 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
+| aws | ~> 2.70 |
 | null | n/a |
 
 ## Inputs
@@ -76,7 +67,7 @@ No requirements.
 | role\_policy\_arns | List of policy ARNs to attach to Lambda role | `list` | n/a | yes |
 | role\_policy\_arns\_count | Count of policy ARNs to attach to Lambda role | `string` | n/a | yes |
 | runtime | Lambda runtime type | `string` | n/a | yes |
-| s3\_bucket | Name of s3 bucket used for Lambda build | `string` | n/a | yes |
+| s3\_bucket | Name of s3 bucket used for Lambda build | `string` | `""` | no |
 | s3\_key | Key for s3 object for Lambda function code | `string` | `""` | no |
 | security\_group\_ids | List of security group IDs for Lambda VPC config (leave empty if no VPC) | `list` | `[]` | no |
 | source\_arns | List of arns for Lambda triggers; order must match source\_types | `list` | `[]` | no |
