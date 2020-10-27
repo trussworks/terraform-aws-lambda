@@ -117,4 +117,8 @@ variable "source_arns" {
   type        = "list"
 }
 
-
+variable "handler" {
+  default     = "main.Main"
+  description = "The entrypoint function for the lambda function."
+  type        = "string"
+}
