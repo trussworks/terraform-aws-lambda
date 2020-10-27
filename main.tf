@@ -99,7 +99,7 @@ resource "aws_lambda_function" "main_from_s3" {
 
   function_name = local.full_name
   role          = aws_iam_role.main.arn
-  handler       = var.name
+  handler       = var.handler
   runtime       = var.runtime
   memory_size   = var.memory_size
   timeout       = var.timeout
@@ -139,7 +139,7 @@ resource "aws_lambda_function" "main_from_gh" {
 
   function_name = local.full_name
   role          = aws_iam_role.main.arn
-  handler       = var.name
+  handler       = var.handler
   runtime       = var.runtime
   memory_size   = var.memory_size
   timeout       = var.timeout

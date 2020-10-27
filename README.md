@@ -61,6 +61,7 @@ module "my_lambda_function" {
 | github\_filename | Name of the file to get when building url to pull. | `string` | `"deployment.zip"` | no |
 | github\_project | The unique Github project to pull from. Currently, this must be public. Eg. 'trussworks/aws-iam-sleuth' | `string` | `""` | no |
 | github\_release | The release tag to download. | `string` | `""` | no |
+| handler | The entrypoint function for the lambda function. | `string` | `"main.Main"` | no |
 | job\_identifier | Identifier for specific instance of Lambda function | `string` | n/a | yes |
 | memory\_size | Size in MB of Lambda function memory allocation | `string` | `128` | no |
 | name | Lambda function name | `string` | n/a | yes |
