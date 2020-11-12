@@ -42,14 +42,14 @@ module "my_lambda_function" {
 
 | Name | Version |
 |------|---------|
-| terraform | ~> 0.12.0 |
-| aws | ~> 2.70 |
+| terraform | >= 0.12.0 |
+| aws | >= 2.70 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | ~> 2.70 |
+| aws | >= 2.70 |
 | null | n/a |
 
 ## Inputs
