@@ -68,7 +68,7 @@ SH
 
   # Rerun this script if the input values change.
   triggers = {
-    role_policy_arns_count_computed = "${length(var.role_policy_arns)}"
+    role_policy_arns_count_computed = length(var.role_policy_arns)
     role_policy_arns_count_provided = var.role_policy_arns_count
   }
 }
@@ -122,8 +122,8 @@ resource "aws_lambda_function" "main_from_s3" {
 resource "null_resource" "get_github_release_artifact" {
   count = local.from_github ? 1 : 0
   triggers = {
-    version_string = "${var.github_release}"
-    file_hash      = "${var.validation_sha}"
+    version_string = var.github_release
+    file_hash      = var.validation_sha
   }
   provisioner "local-exec" {
     command = "bash ${path.module}/scripts/dl-release.sh ${local.github_dl_url} ${var.github_filename} ${var.validation_sha}"
@@ -132,8 +132,9 @@ resource "null_resource" "get_github_release_artifact" {
 
 # Only on Lambda function from github
 resource "aws_lambda_function" "main_from_gh" {
-  count      = local.from_github ? 1 : 0
-  depends_on = [aws_cloudwatch_log_group.main]
+  count = local.from_github ? 1 : 0
+  depends_on = [aws_cloudwatch_log_group.main,
+  null_resource.get_github_release_artifact]
 
   filename         = var.github_filename
   source_code_hash = var.validation_sha
@@ -157,15 +158,28 @@ resource "aws_lambda_function" "main_from_gh" {
   }
 }
 
-# Add lambda permissions for acting on various triggers.
-resource "aws_lambda_permission" "allow_source" {
-  count = "${length(var.source_types)}"
+# Add lambda permissions for acting on various triggers for GH based lambdas.
+resource "aws_lambda_permission" "allow_source_gh" {
+  count = local.from_github ? length(var.source_types) : 0
 
   statement_id = "AllowExecutionForLambda-${var.source_types[count.index]}"
 
   action        = "lambda:InvokeFunction"
-  function_name = local.full_name
+  function_name = aws_lambda_function.main_from_gh[0].function_name
 
   principal  = "${var.source_types[count.index]}.amazonaws.com"
-  source_arn = "${var.source_arns[count.index]}"
+  source_arn = var.source_arns[count.index]
+}
+
+# Add lambda permissions for acting on various triggers for S3 based lambdas.
+resource "aws_lambda_permission" "allow_source_s3" {
+  count = local.from_github ? 0 : length(var.source_types)
+
+  statement_id = "AllowExecutionForLambda-${var.source_types[count.index]}"
+
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.main_from_s3[0].function_name
+
+  principal  = "${var.source_types[count.index]}.amazonaws.com"
+  source_arn = var.source_arns[count.index]
 }
