@@ -104,6 +104,7 @@ resource "aws_lambda_function" "main_from_s3" {
   runtime       = var.runtime
   memory_size   = var.memory_size
   timeout       = var.timeout
+  publish = var.publish
 
   environment {
     variables = var.env_vars

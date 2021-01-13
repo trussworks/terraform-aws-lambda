@@ -122,3 +122,9 @@ variable "handler" {
   description = "The entrypoint function for the lambda function."
   type        = string
 }
+
+variable "publish" {
+  description = "Whether to publish creation/change as new Lambda Function Version."
+  type        = bool
+  default     = false
+}
