@@ -16,7 +16,7 @@ module "my_lambda_function" {
   job_identifier         = "instance_alpha"
   runtime                = "go1.x"
   role_policy_arns_count = 1
-  role_policy_arns       = ["${aws_iam_policy.my_app_lambda_policy.arn}"]
+  role_policy_arns       = [aws_iam_policy.my_app_lambda_policy.arn]
   s3_bucket              = "my_s3_bucket"
   s3_key                 = "my_app/1.0/my_app.zip"
 
@@ -24,7 +24,7 @@ module "my_lambda_function" {
   security_group_ids     = ["sg-0123456789abcdef0"]
 
   source_types           = ["events"]
-  source_arns            = ["${aws_cloudwatch_event_rule.trigger.arn}"]
+  source_arns            = [aws_cloudwatch_event_rule.trigger.arn]
 
   env_vars = {
     VARNAME = "value"
