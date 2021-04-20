@@ -65,6 +65,7 @@ module "my_lambda_function" {
 | job\_identifier | Identifier for specific instance of Lambda function | `string` | n/a | yes |
 | memory\_size | Size in MB of Lambda function memory allocation | `string` | `128` | no |
 | name | Lambda function name | `string` | n/a | yes |
+| publish | Whether to publish creation/change as new Lambda Function Version. | `bool` | `false` | no |
 | role\_policy\_arns | List of policy ARNs to attach to Lambda role | `list` | n/a | yes |
 | role\_policy\_arns\_count | Count of policy ARNs to attach to Lambda role | `string` | n/a | yes |
 | runtime | Lambda runtime type | `string` | n/a | yes |
