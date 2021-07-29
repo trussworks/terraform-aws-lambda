@@ -6,8 +6,7 @@ locals {
   full_name = "${var.name}-${var.job_identifier}"
 
   # Only use github if project is defined... otherwise default to expecting s3
-  from_github   = var.github_project != "" ? true : false
-  github_dl_url = "https://github.com/${var.github_project}/releases/download/${var.github_release}"
+  from_github = var.github_project != "" ? true : false
 }
 
 # This is the IAM policy for letting lambda assume roles.
@@ -127,7 +126,7 @@ resource "null_resource" "get_github_release_artifact" {
     file_hash      = var.validation_sha
   }
   provisioner "local-exec" {
-    command = "bash ${path.module}/scripts/dl-release.sh ${local.github_dl_url} ${var.github_filename} ${var.validation_sha}"
+    command = "bash ${path.module}/scripts/dl-release.sh ${var.github_project} ${var.github_filename} ${var.github_release} ${var.validation_sha} ${var.github_token}"
   }
 }
 
