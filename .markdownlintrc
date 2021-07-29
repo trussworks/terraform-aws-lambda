@@ -3,5 +3,8 @@
   "first-header-h1": false,
   "first-line-h1": false,
   "line_length": false,
-  "no-multiple-blanks": false
+  "no-multiple-blanks": false,
+  "MD033": {
+    "allowed_elements": ["a", "pre", "br"]
+  }
 }
