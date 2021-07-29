@@ -3,6 +3,12 @@ variable "name" {
   type        = string
 }
 
+variable "github_token" {
+  description = "GitHub Token"
+  type        = string
+  sensitive   = true
+}
+
 variable "job_identifier" {
   description = "Identifier for specific instance of Lambda function"
   type        = string
@@ -30,7 +36,7 @@ variable "s3_key" {
 variable "github_project" {
   default     = ""
   type        = string
-  description = "The unique Github project to pull from. Currently, this must be public. Eg. 'trussworks/aws-iam-sleuth'"
+  description = "The unique Github project to pull from."
 }
 
 variable "github_release" {
@@ -59,7 +65,7 @@ variable "role_policy_arns_count" {
 
 variable "role_policy_arns" {
   description = "List of policy ARNs to attach to Lambda role"
-  type        = list
+  type        = list(any)
 }
 
 
@@ -78,25 +84,25 @@ variable "timeout" {
 variable "tags" {
   default     = {}
   description = "Map of tags for Lambda function"
-  type        = map
+  type        = map(any)
 }
 
 variable "env_vars" {
   default     = {}
   description = "Map of environment variables for Lambda function"
-  type        = map
+  type        = map(any)
 }
 
 variable "subnet_ids" {
   default     = []
   description = "List of subnet IDs for Lambda VPC config (leave empty if no VPC)"
-  type        = list
+  type        = list(any)
 }
 
 variable "security_group_ids" {
   default     = []
   description = "List of security group IDs for Lambda VPC config (leave empty if no VPC)"
-  type        = list
+  type        = list(any)
 }
 
 variable "cloudwatch_logs_retention_days" {
@@ -108,13 +114,13 @@ variable "cloudwatch_logs_retention_days" {
 variable "source_types" {
   default     = []
   description = "List of sources for Lambda triggers; order must match source_arns"
-  type        = list
+  type        = list(any)
 }
 
 variable "source_arns" {
   default     = []
   description = "List of arns for Lambda triggers; order must match source_types"
-  type        = list
+  type        = list(any)
 }
 
 variable "handler" {
