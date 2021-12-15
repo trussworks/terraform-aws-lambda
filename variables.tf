@@ -59,7 +59,7 @@ variable "role_policy_arns_count" {
 
 variable "role_policy_arns" {
   description = "List of policy ARNs to attach to Lambda role"
-  type        = list
+  type        = list(any)
 }
 
 
@@ -78,25 +78,25 @@ variable "timeout" {
 variable "tags" {
   default     = {}
   description = "Map of tags for Lambda function"
-  type        = map
+  type        = map(any)
 }
 
 variable "env_vars" {
   default     = {}
   description = "Map of environment variables for Lambda function"
-  type        = map
+  type        = map(any)
 }
 
 variable "subnet_ids" {
   default     = []
   description = "List of subnet IDs for Lambda VPC config (leave empty if no VPC)"
-  type        = list
+  type        = list(any)
 }
 
 variable "security_group_ids" {
   default     = []
   description = "List of security group IDs for Lambda VPC config (leave empty if no VPC)"
-  type        = list
+  type        = list(any)
 }
 
 variable "cloudwatch_logs_retention_days" {
@@ -108,13 +108,13 @@ variable "cloudwatch_logs_retention_days" {
 variable "source_types" {
   default     = []
   description = "List of sources for Lambda triggers; order must match source_arns"
-  type        = list
+  type        = list(any)
 }
 
 variable "source_arns" {
   default     = []
   description = "List of arns for Lambda triggers; order must match source_types"
-  type        = list
+  type        = list(any)
 }
 
 variable "handler" {
@@ -127,4 +127,10 @@ variable "publish" {
   description = "Whether to publish creation/change as new Lambda Function Version."
   type        = bool
   default     = false
+}
+
+variable "cloudwatch_encryption_key_arn" {
+  description = "The arn of the encryption key to be used for the cloudwatch logs"
+  type        = string
+  default     = ""
 }
