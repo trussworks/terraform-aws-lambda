@@ -84,7 +84,8 @@ resource "aws_iam_role_policy_attachment" "user_policy_attach" {
 resource "aws_cloudwatch_log_group" "main" {
   name              = "/aws/lambda/${local.full_name}"
   retention_in_days = var.cloudwatch_logs_retention_days
-
+  # set the key, else empty string
+  kms_key_id = var.cloudwatch_encryption_key_arn
   tags = {
     Name = local.full_name
   }
