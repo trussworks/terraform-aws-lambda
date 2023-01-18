@@ -83,6 +83,7 @@ No modules.
 | <a name="input_cloudwatch_encryption_key_arn"></a> [cloudwatch\_encryption\_key\_arn](#input\_cloudwatch\_encryption\_key\_arn) | The arn of the encryption key to be used for the cloudwatch logs | `string` | `""` | no |
 | <a name="input_cloudwatch_logs_retention_days"></a> [cloudwatch\_logs\_retention\_days](#input\_cloudwatch\_logs\_retention\_days) | Number of days to retain logs in Cloudwatch Logs | `string` | `30` | no |
 | <a name="input_env_vars"></a> [env\_vars](#input\_env\_vars) | Map of environment variables for Lambda function | `map(any)` | `{}` | no |
+| <a name="input_ephemeral_storage"></a> [ephemeral\_storage](#input\_ephemeral\_storage) | Size in MB of Lambda function ephemeral storage allocation | `string` | `512` | no |
 | <a name="input_github_filename"></a> [github\_filename](#input\_github\_filename) | Name of the file to get when building url to pull. | `string` | `"deployment.zip"` | no |
 | <a name="input_github_project"></a> [github\_project](#input\_github\_project) | The unique Github project to pull from. Currently, this must be public. Eg. 'trussworks/aws-iam-sleuth' | `string` | `""` | no |
 | <a name="input_github_release"></a> [github\_release](#input\_github\_release) | The release tag to download. | `string` | `""` | no |
