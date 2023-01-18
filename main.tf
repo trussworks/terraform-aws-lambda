@@ -111,6 +111,10 @@ resource "aws_lambda_function" "main_from_s3" {
     variables = var.env_vars
   }
 
+  ephemeral_storage {
+    size = var.ephemeral_storage
+  }
+
   tags = var.tags
 
   vpc_config {
@@ -150,6 +154,10 @@ resource "aws_lambda_function" "main_from_gh" {
 
   environment {
     variables = var.env_vars
+  }
+
+  ephemeral_storage {
+    size = var.ephemeral_storage
   }
 
   tags = var.tags

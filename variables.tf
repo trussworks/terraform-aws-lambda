@@ -69,6 +69,12 @@ variable "memory_size" {
   type        = string
 }
 
+variable "ephemeral_storage" {
+  default     = 512
+  description = "Size in MB of Lambda function ephemeral storage allocation"
+  type        = string
+}
+
 variable "timeout" {
   default     = 60
   description = "Timeout in seconds for Lambda function timeout"
