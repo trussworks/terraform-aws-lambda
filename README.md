@@ -37,7 +37,7 @@ module "my_lambda_function" {
 }
 ```
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -112,5 +112,4 @@ No modules.
 | <a name="output_function_name"></a> [function\_name](#output\_function\_name) | Name of the AWS Lambda function |
 | <a name="output_invoke_arn"></a> [invoke\_arn](#output\_invoke\_arn) | ARN used to invoke Lambda function from API Gateway |
 | <a name="output_lambda_arn"></a> [lambda\_arn](#output\_lambda\_arn) | ARN for the Lambda function |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-
+<!-- END_TF_DOCS -->

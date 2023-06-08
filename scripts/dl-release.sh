@@ -15,10 +15,10 @@ readonly expectedfilename=$2
 readonly expectedSHA256=$3
 
 # get the file
-curl -sSLO $url/$expectedfilename
+curl -sSLO "$url/$expectedfilename"
 
 # check the file
-if [ $(sha256sum $expectedfilename | cut -f1 -d' ') = $expectedSHA256 ]; then
+if [ "$(sha256sum "$expectedfilename" | cut -f1 -d' ')" = "$expectedSHA256" ]; then
     echo "The downloaded file's sha matched expected sha."
 else
     echo "Error: The downloaded file's sha did not match expected sha."
