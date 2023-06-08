@@ -114,6 +114,3 @@ No modules.
 | <a name="output_lambda_arn"></a> [lambda\_arn](#output\_lambda\_arn) | ARN for the Lambda function |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
-## Terraform Versions
-
-Terraform 0.13 and later. Pin module version to ~> 2.0. Submit pull requests to `master` branch.
