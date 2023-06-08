@@ -37,12 +37,12 @@ module "my_lambda_function" {
 }
 ```
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.0 |
 
 ## Providers
@@ -112,8 +112,4 @@ No modules.
 | <a name="output_function_name"></a> [function\_name](#output\_function\_name) | Name of the AWS Lambda function |
 | <a name="output_invoke_arn"></a> [invoke\_arn](#output\_invoke\_arn) | ARN used to invoke Lambda function from API Gateway |
 | <a name="output_lambda_arn"></a> [lambda\_arn](#output\_lambda\_arn) | ARN for the Lambda function |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-
-## Terraform Versions
-
-Terraform 0.13 and later. Pin module version to ~> 2.0. Submit pull requests to `master` branch.
+<!-- END_TF_DOCS -->
