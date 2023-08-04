@@ -24,12 +24,12 @@ data "aws_iam_policy_document" "assume_role" {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = data.aws_caller_identity.current.account_id
+      values   = [data.aws_caller_identity.current.account_id]
     }
     condition {
       test     = "StringEquals"
       variable = "aws:SourceArn"
-      values   = "arn:${data.aws_partition.current.partition}:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${local.full_name}"
+      values   = ["arn:${data.aws_partition.current.partition}:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${local.full_name}"]
     }
   }
 }
