@@ -88,6 +88,7 @@ No modules.
 | <a name="input_github_project"></a> [github\_project](#input\_github\_project) | The unique Github project to pull from. Currently, this must be public. Eg. 'trussworks/aws-iam-sleuth' | `string` | `""` | no |
 | <a name="input_github_release"></a> [github\_release](#input\_github\_release) | The release tag to download. | `string` | `""` | no |
 | <a name="input_handler"></a> [handler](#input\_handler) | The entrypoint function for the lambda function. | `string` | `"main.Main"` | no |
+| <a name="input_iam_policy_conditions"></a> [iam\_policy\_conditions](#input\_iam\_policy\_conditions) | conditions to attach to the assume role trust policy | <pre>list(<br>    object({<br>      test     = string<br>      variable = string<br>      values   = list(string)<br>    })<br>  )</pre> | `[]` | no |
 | <a name="input_job_identifier"></a> [job\_identifier](#input\_job\_identifier) | Identifier for specific instance of Lambda function | `string` | n/a | yes |
 | <a name="input_memory_size"></a> [memory\_size](#input\_memory\_size) | Size in MB of Lambda function memory allocation | `string` | `128` | no |
 | <a name="input_name"></a> [name](#input\_name) | Lambda function name | `string` | n/a | yes |
