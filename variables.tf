@@ -150,5 +150,9 @@ variable "iam_policy_conditions" {
       values   = list(string)
     })
   )
-  default = []
+  default = [{
+    test     = "StringEquals"
+    variable = "aws:SourceAccount"
+    values   = [data.aws_caller_identity.current.account_id]
+  }]
 }
