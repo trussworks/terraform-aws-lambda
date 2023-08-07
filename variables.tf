@@ -153,6 +153,6 @@ variable "iam_policy_conditions" {
   default = [{
     test     = "StringEquals"
     variable = "aws:SourceAccount"
-    values   = [data.aws_caller_identity.current.account_id]
+    values   = ["${data.aws_caller_identity.current.account_id}"]
   }]
 }
