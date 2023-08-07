@@ -21,10 +21,13 @@ data "aws_iam_policy_document" "assume_role" {
       type        = "Service"
       identifiers = ["lambda.amazonaws.com"]
     }
-    condition {
-      test     = "ArnLike"
-      variable = "aws:SourceArn"
-      values   = ["arn:${data.aws_partition.current.partition}:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${local.full_name}"]
+    dynamic "condition" {
+      for_each = var.iam_policy_conditions
+      content {
+        test     = condition.value["test"]
+        variable = condition.value["variable"]
+        values   = condition.value["values"]
+      }
     }
   }
 }

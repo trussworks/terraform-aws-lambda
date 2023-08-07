@@ -140,3 +140,15 @@ variable "cloudwatch_encryption_key_arn" {
   type        = string
   default     = ""
 }
+
+variable "iam_policy_conditions" {
+  description = "conditions to attach to the assume role trust policy"
+  type = list(
+    object({
+      test     = string
+      variable = string
+      values   = list(string)
+    })
+  )
+  default = []
+}
